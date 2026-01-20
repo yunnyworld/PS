@@ -17,8 +17,8 @@ KMP
         - F[i]를 구했고, F[i+1]을 구해야 하는 상황
         - 만약 P[F[i]]=P[i+1]이라면, F[i+1]=F[i]+1
         - 그렇지 않다면
-            - P[0 ... i]의 Suffix와 일치하는 P의 Prefix를 찾아야 함
-            - P[0 ... F[i]-1]과 P[i-F[i]+1 ... i]는 일치하므로, P[0 ... F[i]-1]의 Suffix를 찾아도 됨
+            - P[0 ... F[i]-1]의 Suffix와 일치하는 P의 Prefix를 찾아야 함
+            - F[i]의 정의에 의해 P[0 ... F[i]-1]과 P[i-F[i]+1 ... i]는 일치하므로, P[0 ... F[i]-1]의 Suffix를 찾아도 됨
             - P[F[i]]=P[i+1]를 만족할 때까지 F[i], F[F[i]], F[F[F[i]]], ... 를 따라가면 됨 
     
     - 실패 함수를 구하는 방법(코드, 시간 복잡도)
@@ -82,7 +82,31 @@ vector<int> KMP(const string &s, const string &p)
     }
     return res;
 }
-
+/*
+Reference: https://daisylum.tistory.com/14
+여기 그림, 코드가 이해하기 편하다.
+실패함수만 다룬다.
+*/ 
+vector<int> GetFail(const string& p) // string p is 1-based
+{
+    int m = p.size();
+    vector<int> fail(m + 1); // 1-based
+    fail[0] = -1;
+    fail[1] = 0;
+    for (int i = 2, j = 0; i <= m; i++) 
+    {
+        j = i - 1;
+        while (j) {
+            if (p[fail[j] + 1] == p[i]) {
+                fail[i] = fail[j] + 1;
+                break;
+            }
+            j = fail[j];
+        }
+        if (!j) fail[i] = 0;
+    }
+    return fail;
+}
 /*
 KMP
 Reference: 프로그래밍 대회에서 배우는 알고리즘 문제해결전략 p649
