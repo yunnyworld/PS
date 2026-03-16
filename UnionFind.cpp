@@ -1,6 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 /*
+struct version
+*/
+struct DSU {
+    vector<int> p;
+    DSU(int n = 0) { init(n); }
+    void init(int n) {
+        p.resize(n + 1);
+        iota(p.begin(), p.end(), 0);
+    }
+    int find(int x) {
+        if (p[x] == x) return x;
+        return p[x] = find(p[x]);
+    }
+    bool unite(int a, int b) {
+        a = find(a), b = find(b);
+        if (a == b) return false;
+        p[a] = b;
+        return true;
+    }
+};
+
+/*
 Union-Find
 Reference: 프로그래밍 대회에서 배우는 알고리즘 문제해결전략2 p769
 */
