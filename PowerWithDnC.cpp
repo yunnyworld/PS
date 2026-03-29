@@ -20,3 +20,9 @@ ll fpow2(ll a, ll x)
     }
     return ret;
 }
+ll pow2(ll a, ll x) {
+    ll ret = 1;
+    for (; x; x >>= 1, a = a * a % MOD)
+        if (x & 1) ret = ret * a % MOD;
+    return ret;
+}
