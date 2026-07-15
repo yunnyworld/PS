@@ -1,5 +1,30 @@
 #include <bits/stdc++.h>
+#define ll long long
 using namespace std;
+
+/*
+Range Maximum Query
+*/
+ll n, a[200005]; // 1-based
+ll table[200005][20];
+
+void RMxQ_init(){
+    for(int i=1;i<=n;i++){
+        table[i][0] = a[i];
+    }
+    for(int j=1;j<20;j++){
+        for(int i=1;i+(1ll<<j)-1<=n;i++) {
+            table[i][j] = max(table[i][j-1], table[i+(1ll<<(j-1))][j-1]);
+        }
+    }
+}
+
+ll RMxQ_query(int l, int r){
+    int j = log2(r-l+1);
+    return max(table[l][j], table[r-(1ll<<j)+1][j]);
+}
+
+
 /*
 Sparse Table (희소 배열)
 Reference: ICPC Shinchon 2022 Summer 중급 10회차
